@@ -77,6 +77,7 @@ function forecast(lat, lon) {
     })
     .then(function (data) {
       console.log(data)
+      forecastContainer.innerHTML = ""
       var currentTemp = data.current.temp;
       var temp = document.createElement('p');
       console.log(currentTemp);
@@ -92,13 +93,32 @@ function forecast(lat, lon) {
 
      for (i = 0; i < 5; i ++) {
       var forecastTemp = data.daily[i].temp.day;
-      var forecastCard = document.createElement('div')
-      var forecastTempEl = document.createElement('p');
-      forecastCard.setAttribute("class", "col-md-2 forecast bg-primary text-white m-2 rounded");
+      var windSpeed = data.daily[i].wind_speed;
+      var forecastWeather = data.daily[i].weather[0].description;
+      var forecastHumidity = data.daily[i].humidity;
+      var forecastIconURL = `https://openweathermap.org/img/w/${data.daily[i].weather[0].icon}.png`
 
-      forecastTempEl.innerHTML = forecastTemp
-      forecastCard.appendChild(forecastTempEl)
-      forecastContainer.appendChild(forecastCard)
+      var forecastCard = document.createElement('div');
+      var forecastTempEl = document.createElement('p');
+      var windSpeedEl = document.createElement('p');   
+      var forecastWeatherEl = document.createElement('p');
+      var forecastHumidityEl = document.createElement('p');
+      var forecastIcon = document.createElement('img');
+
+  
+      forecastCard.setAttribute("class", "col-md-2 forecast bg-primary text-white m-2 rounded");
+      forecastTempEl.innerHTML = "<p>Temp: " + forecastTemp + "&#x2109;</p>";
+      windSpeedEl.innerHTML = "<p>Wind Speed: " + windSpeed + "mph</p>"
+      forecastWeatherEl.innerHTML = forecastWeather;
+      forecastHumidityEl.innerHTML = "<p>Humidity: " + forecastHumidity + "%</p>";
+      forecastIcon.setAttribute('src', forecastIconURL);
+
+      forecastCard.appendChild(forecastWeatherEl);
+      forecastCard.appendChild(forecastIcon)
+      forecastCard.appendChild(forecastTempEl);
+      forecastCard.appendChild(forecastHumidityEl);
+      forecastCard.appendChild(windSpeedEl);
+      forecastContainer.appendChild(forecastCard);
      }
     })
       // if (data.current.uvi.value < 4) {
