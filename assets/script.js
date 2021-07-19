@@ -4,9 +4,11 @@ var apiKey = "91b227cfb38384f6cbe87310fda24986";
 var currentWeather = document.getElementById("current-weather")
 var previousCities = document.getElementById("previous-search")
 var previousSearch = localStorage.getItem('City')
+var forecastContainer = document.getElementById("forecast-container")
 
 function renderSearchHistory() {
   console.log("check local storage");
+  previousCities.innerHTML = "";
   for (let i = 0; i < previousSearchesArray.length; i++) {
     var previousCity = document.createElement("button");
     previousCity.textContent = previousSearchesArray[i];
@@ -77,15 +79,40 @@ function forecast(lat, lon) {
       console.log(data)
       var currentTemp = data.current.temp;
       var temp = document.createElement('p');
-      console.log(currentTemp)
-      temp.textContent = currentTemp
+      console.log(currentTemp);
+      // temp.textContent = "Current Temperature: " + currentTemp;
+      temp.innerHTML = "<p>Current Temperature: " + currentTemp + "&#x2109;</p>";
       currentWeather.appendChild(temp)
 
+      var uvIndex = data.current.uvi;
+      var uvi = document.createElement('span');
+      console.log(uvIndex);
+      uvi.textContent = uvIndex;
+      currentWeather.appendChild(uvi);
+
+     for (i = 0; i < 5; i ++) {
+      var forecastTemp = data.daily[i].temp.day;
+      var forecastCard = document.createElement('div')
+      var forecastTempEl = document.createElement('p');
+      forecastCard.setAttribute("class", "col-md-2 forecast bg-primary text-white m-2 rounded");
+
+      forecastTempEl.innerHTML = forecastTemp
+      forecastCard.appendChild(forecastTempEl)
+      forecastContainer.appendChild(forecastCard)
+     }
     })
-};
+      // if (data.current.uvi.value < 4) {
+      //   uvi.setAttribute("class", "badge badge-success")
+      // } 
+      // else if (data.current.uvi.value < 8) {
+      //   uvi.setAttribute("class", "badge badge-warning")
+      // } 
+      // else {
+      //   (uvi.setAttribute("class", "badge badge-danger")
+      // 
+  }
+      $("#searchBtn").on("click", function () {
+        getCurrentWeather();
+      })
 
-$("#searchBtn").on("click", function () {
-  getCurrentWeather();
-})
-
-getSearchHistory();
+      getSearchHistory();
