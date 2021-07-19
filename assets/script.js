@@ -44,13 +44,22 @@ function getCurrentWeather(city) {
       return response.json();
     })
     .then(function (data) {
-      // console.log(data)
+      console.log(data)
       updateHistory(cityName);
       var lat = data.coord.lat;
       var lon = data.coord.lon;
       currentWeather.innerHTML = ""
       forecast(lat, lon);
       var nameOfCity = data.name;
+      var currentWindSpeed = data.wind.speed
+      var currentHumidity = data.main.humidity
+      console.log(currentHumidity)
+
+      var currentWindSpeedEl= document.createElement('p');
+      currentWindSpeedEl.innerHTML = "<p>Current Wind Speed: " + currentWindSpeed + "mph</p>";
+      var currentHumidityEl = document.createElement('p');
+      currentHumidityEl.innerHTML = "<p>Current Humidity: " + currentHumidity + "%</p>";
+
 
       var iconURL = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
       var icon = document.createElement('img');
@@ -62,6 +71,8 @@ function getCurrentWeather(city) {
       currentWeather.appendChild(currentConditions)
       icon.setAttribute('src', iconURL);
       currentWeather.appendChild(icon);
+      currentWeather.appendChild(currentHumidityEl)
+      currentWeather.appendChild(currentWindSpeedEl)
     }).catch(function (err) {
       console.log("oh no");
       console.log(err);
@@ -76,19 +87,17 @@ function forecast(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
+      // console.log(data)
       forecastContainer.innerHTML = ""
       var currentTemp = data.current.temp;
+      var currentwind
       var temp = document.createElement('p');
-      console.log(currentTemp);
-      // temp.textContent = "Current Temperature: " + currentTemp;
       temp.innerHTML = "<p>Current Temperature: " + currentTemp + "&#x2109;</p>";
       currentWeather.appendChild(temp)
 
       var uvIndex = data.current.uvi;
-      var uvi = document.createElement('span');
-      console.log(uvIndex);
-      uvi.textContent = uvIndex;
+      var uvi = document.createElement('p');
+      uvi.innerHTML = "<p>UV Index: " +uvIndex + "</p>";
       currentWeather.appendChild(uvi);
 
      for (i = 0; i < 5; i ++) {
