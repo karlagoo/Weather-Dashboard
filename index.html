@@ -7,16 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard
     </title>
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
-    <header>
-        <h1>Weather Dashboard</h1>
+    <header><div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Weather Dashboard</h1>
+        </div>
+      </div></header>
     </header>
     <div class="row">
         <aside class="col-4">
@@ -28,7 +31,20 @@
         <main class="col-8">
             <section id="currentWeather">Current Weather</section>
             <div id="current-weather"></div>
-            <section id="weatherForecast">5-Day Forecast</section>
+
+            <div class="row" id="fiveday-header">
+                <div class="col-12">
+                    <h3>5-day Forecast</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 forecast bg-primary text-white m-2 rounded">day 1</div>
+                <div class="col-md-2 forecast bg-primary text-white m-2 rounded">day 2</div>
+                <div class="col-md-2 forecast bg-primary text-white m-2 rounded">day 3</div>
+                <div class="col-md-2 forecast bg-primary text-white m-2 rounded">day 4</div>
+                <div class="col-md-2 forecast bg-primary text-white m-2 rounded">day 5</div>
+            </div>
         </main>
     </div>
 
