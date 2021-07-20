@@ -44,7 +44,10 @@ function getCurrentWeather(city) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
+      console.log(data);
+      const today = new Date();
+      const date = new Date(today);
+      const todayDate = date.toDateString();
       updateHistory(cityName);
       var lat = data.coord.lat;
       var lon = data.coord.lon;
@@ -55,24 +58,26 @@ function getCurrentWeather(city) {
       var currentHumidity = data.main.humidity
       console.log(currentHumidity)
 
-      var currentWindSpeedEl= document.createElement('p');
+      var currentDate = document.createElement('p');
+      currentDate.innerHTML = "<p>" + todayDate + "</p>";
+      var currentWindSpeedEl = document.createElement('p');
       currentWindSpeedEl.innerHTML = "<p>Current Wind Speed: " + currentWindSpeed + "mph</p>";
       var currentHumidityEl = document.createElement('p');
       currentHumidityEl.innerHTML = "<p>Current Humidity: " + currentHumidity + "%</p>";
-
 
       var iconURL = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
       var icon = document.createElement('img');
       var currentConditions = document.createElement("p");
       var city = document.createElement('p');
-      city.textContent = nameOfCity
+      city.textContent = nameOfCity;
+      currentWeather.appendChild(currentDate);
       currentWeather.appendChild(city)
       currentConditions.textContent = data.weather[0].description
       currentWeather.appendChild(currentConditions)
       icon.setAttribute('src', iconURL);
       currentWeather.appendChild(icon);
       currentWeather.appendChild(currentHumidityEl)
-      currentWeather.appendChild(currentWindSpeedEl)
+      currentWeather.appendChild(currentWindSpeedEl);
     }).catch(function (err) {
       console.log("oh no");
       console.log(err);
@@ -96,40 +101,70 @@ function forecast(lat, lon) {
       currentWeather.appendChild(temp)
 
       var uvIndex = data.current.uvi;
-      var uvi = document.createElement('p');
-      uvi.innerHTML = "<p>UV Index: " +uvIndex + "</p>";
+      var uvi = document.createElement('div');
+      uvi.innerHTML = "<p>UV Index: " + uvIndex + "</p>";
       currentWeather.appendChild(uvi);
 
-     for (i = 0; i < 5; i ++) {
-      var forecastTemp = data.daily[i].temp.day;
-      var windSpeed = data.daily[i].wind_speed;
-      var forecastWeather = data.daily[i].weather[0].description;
-      var forecastHumidity = data.daily[i].humidity;
-      var forecastIconURL = `https://openweathermap.org/img/w/${data.daily[i].weather[0].icon}.png`
+      for (i = 0; i < 5; i++) {
+        const today = new Date();
+        const date = new Date(today);
+        date.setDate(date.getDate() + (i + 1));
+        const forecastDate = date.toDateString();
+        console.log(forecastDate);
+        var forecastTemp = data.daily[i].temp.day;
+        var windSpeed = data.daily[i].wind_speed;
+        var forecastWeather = data.daily[i].weather[0].description;
+        var forecastHumidity = data.daily[i].humidity;
+        var forecastIconURL = `https://openweathermap.org/img/w/${data.daily[i].weather[0].icon}.png`
 
-      var forecastCard = document.createElement('div');
-      var forecastTempEl = document.createElement('p');
-      var windSpeedEl = document.createElement('p');   
-      var forecastWeatherEl = document.createElement('p');
-      var forecastHumidityEl = document.createElement('p');
-      var forecastIcon = document.createElement('img');
+        var forecastCard = document.createElement('div');
+        var forecastDateHead = document.createElement('p');
+        //date head hehheehhe
+        var forecastTempEl = document.createElement('p');
+        var windSpeedEl = document.createElement('p');
+        var forecastWeatherEl = document.createElement('p');
+        var forecastHumidityEl = document.createElement('p');
+        var forecastIcon = document.createElement('img');
 
-  
-      forecastCard.setAttribute("class", "col-md-2 forecast bg-primary text-white m-2 rounded");
-      forecastTempEl.innerHTML = "<p>Temp: " + forecastTemp + "&#x2109;</p>";
-      windSpeedEl.innerHTML = "<p>Wind Speed: " + windSpeed + "mph</p>"
-      forecastWeatherEl.innerHTML = forecastWeather;
-      forecastHumidityEl.innerHTML = "<p>Humidity: " + forecastHumidity + "%</p>";
-      forecastIcon.setAttribute('src', forecastIconURL);
 
-      forecastCard.appendChild(forecastWeatherEl);
-      forecastCard.appendChild(forecastIcon)
-      forecastCard.appendChild(forecastTempEl);
-      forecastCard.appendChild(forecastHumidityEl);
-      forecastCard.appendChild(windSpeedEl);
-      forecastContainer.appendChild(forecastCard);
-     }
-    })
+        forecastCard.setAttribute("class", "col-md-2 forecast bg-primary text-white m-2 rounded");
+        forecastDateHead.innerHTML = "<p>" + forecastDate + "</p>"
+        forecastTempEl.innerHTML = "<p>Temp: " + forecastTemp + "&#x2109;</p>";
+        windSpeedEl.innerHTML = "<p>Wind Speed: " + windSpeed + "mph</p>"
+        forecastWeatherEl.innerHTML = forecastWeather;
+        forecastHumidityEl.innerHTML = "<p>Humidity: " + forecastHumidity + "%</p>";
+        forecastIcon.setAttribute('src', forecastIconURL);
+        forecastCard.appendChild(forecastDateHead);
+        forecastCard.appendChild(forecastWeatherEl);
+        forecastCard.appendChild(forecastIcon)
+        forecastCard.appendChild(forecastTempEl);
+        forecastCard.appendChild(forecastHumidityEl);
+        forecastCard.appendChild(windSpeedEl);
+        forecastContainer.appendChild(forecastCard);
+        if (uvIndex < 4) {
+          uvi.setAttribute("class", "badge badge-success")
+        } else if (uvIndex < 8) {
+          uvi.setAttribute("class", "badge badge-warning")
+        } else {
+          uvi.setAttribute("class", "badge badge-danger")
+        }
+
+      }
+    });
+}
+$("#searchBtn").on("click", function () {
+  getCurrentWeather();
+})
+
+getSearchHistory();
+
+const today = new Date();
+const date = new Date(today);
+date.setDate(date.getDate() + 2);
+const foreCastDate = date.toDateString();
+console.log(foreCastDate);
+
+
       // if (data.current.uvi.value < 4) {
       //   uvi.setAttribute("class", "badge badge-success")
       // } 
@@ -138,10 +173,4 @@ function forecast(lat, lon) {
       // } 
       // else {
       //   (uvi.setAttribute("class", "badge badge-danger")
-      // 
-  }
-      $("#searchBtn").on("click", function () {
-        getCurrentWeather();
-      })
-
-      getSearchHistory();
+      // theres paranthesies above ^^^^ around the uvi.setAttribute
