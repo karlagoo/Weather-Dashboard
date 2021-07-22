@@ -11,11 +11,14 @@ function renderSearchHistory() {
   previousCities.innerHTML = "";
   for (let i = 0; i < previousSearchesArray.length; i++) {
     var previousCity = document.createElement("button");
+    var br =  document.createElement("br");
+    previousCity.style.margin = "5px";
+    previousCity.style.width = "200px"
     previousCity.textContent = previousSearchesArray[i];
     previousCity.addEventListener("click", function () {
       getCurrentWeather(previousSearchesArray[i])
     });
-    previousCities.append(previousCity);
+    previousCities.append(previousCity,br);
   }
 };
 
